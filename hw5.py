@@ -17,6 +17,11 @@
 #
 # the parameters should be stored as attributes
 # called "name" and "symptoms" respectively
+class Patient:
+    def __init__(self, name : str, symptoms : list[str]):
+        self.name = name
+        self.symptoms = symptoms
+        self.tests = {}
 
 
 #
@@ -28,7 +33,8 @@
 #
 # This information should be stored somehow.
 
-
+    def add_test(self, test_name: str, result: bool):
+        self.tests[test_name] = result    
 #
 # 1.3)
 # Create a method called has_covid()
@@ -47,7 +53,18 @@
 #    and increases by 0.1 for each of the
 #    following symptoms:
 #    ['fever', 'cough', 'anosmia']
-
+    def has_covid(self):
+        if "covid" in self.tests:
+            if self.tests["covid"] is True:
+                return .99
+            else:
+                return 0.01
+        else:
+            probability = 0.05
+            for symptom in ['fever', 'cough', 'anosmia']:
+                if symptom in self.symptoms:
+                    probability += 0.1
+            return probability
 
 ######################
 
