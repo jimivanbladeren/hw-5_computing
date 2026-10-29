@@ -1,4 +1,6 @@
 ###########################################
+import math
+
 
 #
 # 1. In this exercise we will make a "Patient" class
@@ -78,12 +80,35 @@ class Patient:
 # The constructor (__init__ ) should have two parameters the "suit" and the "value" of the card.
 # The class should store both as attributes.
 
+class Card:
+    def __init__(self, suit: str, value: str):
+        self.suit = suit
+        self.value = value
+
 
 # 2.2) Create a Deck class called "Deck".
 # The constructor will create an English Deck (suits: Hearts, Diamonds, Clubs, Spades and values: A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K). It will create a list of cards that contain each of the existing cards in an English Deck.
 # Create a method called "shuffle" that shuffles the cards randomly. 
 # Create a method called "draw" that will draw a single card and print the suit and value. When a card is drawn, the card should be removed from the deck.
 
+import random
+
+class Deck:
+    def __init__(self):
+        suits = ['Hearts', 'Clubs', 'Spades', 'Diamonds']
+        values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+        self.cards = [Card(suitx, valuex) for suitx in suits for valuex in values]
+
+    def shuffle(self):
+        random.shuffle(self.cards)
+
+    def draw(self):
+        if not self.cards:
+            print('Empty deck.')
+            return None
+        topcard = self.cards.pop(0)
+        print(f"{topcard.suit}, {topcard.value}")
+        return topcard
 
 
 ###################
@@ -94,10 +119,53 @@ class Patient:
 # 3.1Create an abstract class (interface) called "PlaneFigure" with two abstract methods:
 # compute_perimeter() that will implement the formula to compute the perimeter of the plane figure.
 # compute_surface() that will implement the formula to compute the surface of the plane figure.
+from abc import ABCMeta, abstractmethod
+
+class PlaneFigure(metaclass=ABCMeta):
+    def __init__(self):
+        pass
+
+    @abstractmethod
+    def compute_perimeter(self):
+        raise NotImplementedError
+
+    @abstractmethod
+    def compute_surface(self):
+        raise NotImplementedError
 
 # 3.2 Create a child class called "Triangle" that inherits from "PlaneFigure" and has as parameters in the constructor "base", "c1", "c2", "h". ("base" being the base, "c1" and "c2" the other two sides of the triangle and "h" the height). Implement the abstract methods with the formula of the triangle.
+class Triangle(PlaneFigure):
+    def __init__(self, base, c1, c2, h):
+        self.base = base
+        self.side1 = c1
+        self.side2 = c2
+        self.height = h
+
+    def compute_perimeter(self):
+        return self.base + self.side1 + self.side2
+
+    def compute_surface(self):
+        return 0.5*self.base*self.height
 
 # 3.3 Create a child class called "Rectangle" that inherits from "PlaneFigure" and has as parameters in the constructor "a", "b" (sides of the rectangle). Implement the abstract methods with the formula of the rectangle.
+class Rectangle(PlaneFigure):
+    def __init__(self, a, b):
+        self.length = a
+        self.width = b
+
+    def compute_perimeter(self):
+        return 2*(self.length + self.width)
+
+    def compute_surface(self):
+        return self.length * self.width
 
 # 3.3 Create a child class called "Circle" that inherits from "PlaneFigure" and has as parameters in the constructor "radius" (radius of the circle). Implement the abstract methods with the formula of the circle.
+class Circle(PlaneFigure):
+    def __init__(self, radius):
+        self.radius = radius
 
+    def compute_perimeter(self):
+        return math.pi*2*self.radius
+
+    def compute_surface(self):
+        return math.pi*self.radius**2
